@@ -1,0 +1,159 @@
+@use "../colors";
+
+.profile-page {
+    width: 100%;
+    height: calc(100% - 75px);
+    position: relative;
+    top: 75px;
+
+    & .container {
+        width: 90%;
+        height: 90%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 10px;
+        outline: 2px solid colors.$color-low-white;
+        display: grid;
+        grid-template-columns: 20% 80%;
+
+        & .left {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border-right: 2px solid colors.$color-low-white;
+            align-items: center;
+            justify-content: center;
+
+            & .data {
+                width: 80%;
+                height: 60%;
+                text-align: center;
+
+                & #avatar-loader {
+                    width: 100%;
+                    min-width: 100px;
+                    aspect-ratio: 1;
+                    overflow: hidden;
+                    border-radius: 50%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+
+                    & .avatar {
+                        width: 95%;
+                        height: 95%;
+                        border-radius: 50%;
+                        overflow: hidden;
+
+                        & img {
+                            width: 100%;
+                        }
+                    }
+
+
+                    & input {
+                        display: none;
+                    }
+                }
+
+                & button {
+                    margin-top: 10px;
+                    width: 120px;
+                    height: 32px;
+                }
+
+                & span {
+                    color: red;
+                    margin-top: 10px;
+                }
+            }
+
+
+        }
+
+        & .right {
+            position: relative;
+
+            & .title {
+                position: absolute;
+                top: 4%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 32px;
+                font-weight: bold;
+            }
+
+            & .info-container {
+                width: 80%;
+                height: calc(8 * 60px + 60px);
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                // display: flex;
+                // flex-direction: column;
+
+                & .info-data {
+                    height: 50px;
+                    margin-top: 10px;
+                    border-radius: 5px;
+                    font-size: 20px;
+                    display: flex;
+                    align-items: center;
+
+                    & * {
+                        // display: inline-block;
+                        // margin-top: 10px;
+                        padding-left: 10px;
+                    }
+
+                    &:hover {
+                        background-color: colors.$color-low-white;
+                    }
+
+                    & input {
+                        border: none;
+                        outline: none;
+                        background: none;
+                        height: 95%;
+                        flex: 1;
+                        font-size: 20px;
+                    }
+
+                    & input[type="radio"] {
+                        flex: 0;
+
+                        &[value="male"] {
+                            margin-left: 30px;
+                        }
+
+                        &[value="female"] {
+                            margin-left: 100px;
+                        }
+                    }
+
+                    & label {
+                        font-size: 20px;
+                    }
+                }
+
+                & button {
+                    width: 120px;
+                    height: 40px;
+                    border-radius: 20px;
+                    font-size: 18px;
+                    margin-top: 20px;
+                }
+
+                & span.info-error {
+                    display: block;
+                    color: red;
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}

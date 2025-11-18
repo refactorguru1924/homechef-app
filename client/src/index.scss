@@ -1,0 +1,58 @@
+@use "./colors";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  scroll-behavior: smooth;
+}
+
+
+:root {
+  --color-primary: #{colors.$color-primary};
+  --color-low-white: #{colors.$color-low-white};
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: colors.$color-background;
+
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  // overflow: hidden;
+}
+
+a {
+  // color: transparent;
+  text-decoration: none;
+}
+
+button {
+  width: 120px;
+  height: 40px;
+  border-radius: 20px;
+  border: 1px solid black;
+  outline: none;
+  background-color: white;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &.disable {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  &:hover {
+    color: white;
+    border: 1px solid black;
+    background-color: black;
+  }
+}

@@ -1,0 +1,99 @@
+@use "../colors";
+
+.product {
+    width: 275px;
+    height: 400px;
+    // outline: 1px solid black;
+    // outline: 1px solid colors.$color-low-white;
+    overflow: hidden;
+    display: block;
+    border-radius: 5px;
+
+    &:hover {
+        outline: 2px solid colors.$color-low-white;
+    }
+
+    & .img-container {
+        width: inherit;
+        aspect-ratio: 1;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        & img {
+            height: 90%;
+            transition: 0.5s;
+
+            &:hover {
+                height: 93%;
+            }
+        }
+    }
+
+    & .content-container {
+        width: 100%;
+        height: 125px;
+        display: grid;
+        grid-template-columns: 67.5px 67.5px 140px;
+        grid-template-rows: 37.5px 25px 60px;
+        grid-template-areas:
+            "nn nn nn nn"
+            "rr rr rr rr"
+            "pp pp cc cc";
+        align-items: center;
+
+        & .name {
+            grid-area: nn;
+            padding-left: 10px;
+            padding-right: 10px;
+            font-weight: 600;
+            // font-size: large;
+            // make ...
+            display: -webkit-box;
+            word-break: break-all;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        & .price {
+            grid-area: pp;
+            font-size: 20px;
+            padding-top: 5px;
+            padding-left: 10px;
+            font-weight: bold;
+            color: colors.$color-red;
+        }
+
+        & .rate {
+            margin-left: 10px;
+            grid-area: rr;
+
+            & .product-rating {
+                display: inline-block;
+            }
+        }
+
+        & button {
+            grid-area: cc;
+            width: 120px;
+            height: 40px;
+            // padding-left: 15px;
+            // padding-right: 30px;
+            border-radius: 20px;
+            border: 1px solid black;
+            outline: none;
+            background-color: white;
+            cursor: pointer;
+            transition: 0.2s;
+
+            &:hover {
+                color: white;
+                border: 1px solid black;
+                background-color: black;
+            }
+        }
+    }
+}

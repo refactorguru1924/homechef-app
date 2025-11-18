@@ -1,0 +1,30 @@
+@use "../colors";
+
+.footer {
+    width: 90%;
+    height: 150px;
+    background-color: white;
+    position: relative;
+    top: 75px;
+    left: 50%;
+    transform: translate(-50%);
+    border-top: 2px solid colors.$color-low-white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & div {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        a {
+            cursor: pointer;
+
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+    }
+}
