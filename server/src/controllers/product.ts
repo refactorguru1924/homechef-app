@@ -131,7 +131,7 @@ async function handleSuggestProductByID(request: FastifyRequest, reply: FastifyR
         return reply.status(500).send(errorMessage("Server error"))
     }
 }
-async function handleSuggest(request: FastifyRequest, reply: FastifyReply) {
+async function handleSuggest(_request: FastifyRequest, reply: FastifyReply) {
     const result = productsCache.toArray() as Product[]
     return reply.send(result.slice(result.length - 60))
 }

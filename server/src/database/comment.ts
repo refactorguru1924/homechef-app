@@ -1,4 +1,3 @@
-import { Cache } from "js-simple-cache"
 import { Comment } from "../models/index.js"
 import database from "./database.js"
 import { RowDataPacket } from "mysql2/promise"
@@ -51,6 +50,9 @@ async function dbQueryComments(productID: number, startIndex: number | undefined
         ].join(' ')
         if (!startIndex) queryString = queryString.replace(`AND comment_id ${replace} ?`, '')
         const [rows] = await database.query(queryString, [productID, startIndex]) as RowDataPacket[]
+        if (!rows) {
+            return comments
+        }
         rows.forEach((row: DBComment) => {
             const commentID = row['comment_id']
             const userID = row['user_id']
@@ -83,7 +85,13 @@ async function dbInsertComment(userID: number, productID: number, content: strin
             `WHERE comment_id = ?`,
         ].join(' ')
         const [result] = await database.query(queryString, [userID, productID, content]) as RowDataPacket[]
+        if (!result || !result.insertId) {
+            throw new Error('Failed to insert comment')
+        }
         const [rows] = await database.query(queryString1, [result.insertId]) as RowDataPacket[]
+        if (!rows) {
+            throw new Error('Failed to retrieve inserted comment')
+        }
         const data = rows[0] as DBComment
         const commentID = data['comment_id']
         // const userID = data['user_id']
@@ -110,7 +118,7 @@ async function dbDeleteComment(commentID: number, userID: number) {
             'WHERE comment_id = ? AND user_id = ?'
         ].join(' ')
         const [result] = await database.query(queryString, [commentID, userID]) as RowDataPacket[]
-        if (result.affectedRows === 0) throw new Error('No comments were deleted')
+        if (!result || result.affectedRows === 0) throw new Error('No comments were deleted')
     } catch (error: any) {
         throw new Error(error.message)
     }

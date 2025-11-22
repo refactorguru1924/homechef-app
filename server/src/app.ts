@@ -1,8 +1,7 @@
-import fastify, { FastifyReply, FastifyRequest } from "fastify"
+import fastify from "fastify"
 import fastifyStatic from "@fastify/static"
 import path from "path"
 import { SERVER_PORT, USE_SWAGGER, __dirname } from "./config.js"
-import fs from "fs"
 import {
     userRoutes,
     authRoutes,
@@ -67,7 +66,7 @@ const swaggerUiOptions: FastifySwaggerUiOptions = {
     routePrefix: "/docs",
     // exposeRoute: true,
 }
-await app.register(fastifyRateLimit.default, {
+app.register(fastifyRateLimit, {
     global: false,
     max: 1000,
     timeWindow: '1 minute'
@@ -82,14 +81,14 @@ if (USE_SWAGGER) {
 
 
 // Only God know what I'm doing
-app.register((instance, opts, next) => {
+app.register((instance, _opts, next) => {
     instance.register(fastifyStatic, {
         root: path.join(__dirname, '../public'),
     })
     next()
 })
 
-app.register((instance, opts, next) => {
+app.register((instance, _opts, next) => {
     instance.register(fastifyStatic, {
         root: path.join(__dirname, '../static'),
         prefix: '/static'
@@ -106,7 +105,7 @@ app.register(productRoutes, { prefix: '/api/product' })
 app.register(orderRoutes, { prefix: '/api/order' })
 app.register(commentRoutes, { prefix: '/api/comment' })
 
-app.setNotFoundHandler((request: any, reply: any) => { // same of `setErrorHandler`
+app.setNotFoundHandler((_request: any, reply: any) => { // same of `setErrorHandler`
     return reply.status(200).sendFile('index.html', path.join(__dirname, '../public'))
 })
 

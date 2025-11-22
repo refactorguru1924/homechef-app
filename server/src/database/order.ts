@@ -38,6 +38,9 @@ async function initializeOrder() {
             "ORDER BY orders.order_id DESC"
         ].join(' ')
         const [rows] = await database.query(queryString) as RowDataPacket[]
+        if (!rows) {
+            throw new Error('No data returned from database query')
+        }
         rows.forEach((item: DBOrder) => {
             const orderID = item['order_id']
             const userID = item['user_id']
@@ -81,6 +84,9 @@ async function dbSelectOrderFromUser(userID: number, from?: number) {
             "LIMIT 10"
         ].join(' ')
         const [rows] = await database.query(queryString, [userID, from]) as RowDataPacket[]
+        if (!rows) {
+            return result
+        }
         rows.forEach((item: DBOrder) => {
             const orderID = item['order_id']
             const userID = item['user_id']
@@ -120,6 +126,9 @@ async function dbCheckUserBought(userID: number, productID: number) {
             "LIMIT 1"
         ].join(' ')
         const [rows] = await database.query(queryString, [userID, productID]) as RowDataPacket[]
+        if (!rows) {
+            return { bought: false }
+        }
         if (rows.length !== 0) return { bought: true }
         return { bought: false }
     } catch (error: any) {
@@ -141,6 +150,9 @@ async function dbSelectOrderByID(orderID: number) {
             'HAVING orders.order_id = ?'
         ].join(' ')
         const [rows] = await database.query(queryString, [orderID]) as RowDataPacket[]
+        if (!rows) {
+            return null
+        }
         const data = rows[0] as DBOrder
         if (!data) return null
         const orderID1 = data['order_id']
@@ -178,6 +190,9 @@ async function dbIsLatestOrderPaid(userID: number) {
             "LIMIT 1"
         ].join(' ')
         const [rows] = await database.query(queryString, [userID]) as RowDataPacket[]
+        if (!rows) {
+            return true
+        }
         const data = rows[0] as DBOrder
         if (!data) return true
         if (data.paid) return true
@@ -241,6 +256,9 @@ async function dbInsertOrder(userID: number, productID: number, quantity: number
             'INSERT INTO orders(user_id) VALUES(?)'
         ].join(' ')
         const [result] = await database.query(queryString, [userID]) as RowDataPacket[]
+        if (!result || !result.insertId) {
+            throw new Error('Failed to create order')
+        }
         const newOrder = await dbInsertOrderDetail(result.insertId, productID, quantity)
         return newOrder
     } catch (error: any) {

@@ -16,6 +16,9 @@ async function dbSelectRating(userID: number, productID: number) {
             'WHERE user_id = ? AND product_id = ?'
         ].join(' ')
         const [rows] = await database.query(queryString, [userID, productID]) as RowDataPacket[]
+        if (!rows) {
+            throw new Error('Failed to retrieve rating data')
+        }
         return rows[0] as DBRate
     } catch (error: any) {
         throw new Error(error.message)
@@ -35,6 +38,9 @@ async function dbInsertRating(userID: number, productID: number, rate: number) {
         ].join(' ')
         await database.query(queryString, [userID, productID, rate])
         const [rows] = await database.query(queryString1, [productID]) as RowDataPacket[]
+        if (!rows) {
+            throw new Error('Failed to calculate average rating')
+        }
         product.updateRating(parseFloat(rows[0].rate))
         product.updateRatingCount()
     } catch (error: any) {
@@ -55,6 +61,9 @@ async function dbUpdateRating(userID: number, productID: number, rate: number) {
         ].join(' ')
         await database.query(queryString, [rate, userID, productID])
         const [rows] = await database.query(queryString1, [productID]) as RowDataPacket[]
+        if (!rows) {
+            throw new Error('Failed to calculate average rating')
+        }
         product.updateRating(parseFloat(rows[0].rate))
     } catch (error: any) {
         throw new Error(error.message)

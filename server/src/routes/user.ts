@@ -51,8 +51,8 @@ const userChangeInfoSchema: FastifySchema = {
             birthDate: { type: 'string', minLength: 10 },
             sex: { type: 'string', maxLength: 1 },
             address: { type: 'string', maxLength: 255 },
-            email: { type: 'string', maxLength: 255, pattern: '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$' },
-            phoneNumber: { type: 'string', minLength: 10, pattern: '0\d{9}' },
+            email: { type: 'string', maxLength: 255, pattern: '^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$' },
+            phoneNumber: { type: 'string', minLength: 10, pattern: '0\\d{9}' },
         },
         required: ['username', 'firstName', 'lastName', 'birthDate', 'sex', 'address']
     },
@@ -108,36 +108,18 @@ const avatarSchema: FastifySchema = {
         '5xx': errorReply
     }
 }
-async function userRoutes(app: FastifyInstance, options: RegisterOptions) {
+async function userRoutes(app: FastifyInstance, _options: RegisterOptions) {
     app.get('/info', {
-        config: {
-            rateLimit: {
-                max: 100,
-                timeWindow: '1 minute'
-            }
-        },
         preHandler: [authenticateToken],
         handler: handleGetInfo,
         schema: userSchema
     })
     app.post('/info', {
-        config: {
-            rateLimit: {
-                max: 100,
-                timeWindow: '1 minute'
-            }
-        },
         preHandler: [authenticateToken, trimBody],
         handler: handleEditInfo,
         schema: userChangeInfoSchema
     })
     app.post('/avatar', {
-        config: {
-            rateLimit: {
-                max: 100,
-                timeWindow: '1 minute'
-            }
-        },
         preHandler: [authenticateToken],
         handler: handleAddAvatar,
         schema: avatarSchema

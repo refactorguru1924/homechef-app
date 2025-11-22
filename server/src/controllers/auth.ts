@@ -18,7 +18,7 @@ import {
 } from "../services/auth.js"
 import { NewUser } from "../database/user.js"
 import { errorMessage, getLanguage } from "../services/index.js"
-import languages from './languages/authError.json' assert { type: "json" }
+import languages from './languages/authError.json' with { type: "json" }
 interface UserLogin {
     username: string
     password: string

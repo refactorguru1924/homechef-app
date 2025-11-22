@@ -19,6 +19,9 @@ async function initializeSupplier() {
             'FROM suppliers'
         ].join(' ')
         const [rows] = await database.query(queryString) as RowDataPacket[]
+        if (!rows) {
+            throw new Error('No data returned from database query')
+        }
         rows.forEach((row: DBSupplier) => {
             const supplierID = row['supplier_id']
             const supplierName = row['supplier_name']

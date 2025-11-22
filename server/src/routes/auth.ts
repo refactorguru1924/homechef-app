@@ -43,8 +43,8 @@ const registerSchema: FastifySchema = {
             birthDate: { type: 'string', minLength: 10 },
             sex: { type: 'string', maxLength: 1 },
             address: { type: 'string', maxLength: 255 },
-            email: { type: 'string', maxLength: 255, pattern: '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$' },
-            phoneNumber: { type: 'string', minLength: 10, pattern: '0\d{9}' },
+            email: { type: 'string', maxLength: 255, pattern: '^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$' },
+            phoneNumber: { type: 'string', minLength: 10, pattern: '0\\d{9}' },
         },
         required: ['username', 'password', 'firstName', 'lastName', 'birthDate', 'sex', 'address']
     },
@@ -127,56 +127,26 @@ const changePasswordSchema: FastifySchema = {
         required: ['newPassword', 'password']
     }
 }
-async function authRoutes(app: FastifyInstance, options: RegisterOptions) {
+async function authRoutes(app: FastifyInstance, _options: RegisterOptions) {
     app.post('/login', {
-        config: {
-            rateLimit: {
-                max: 30,
-                timeWindow: '1 minute'
-            }
-        },
         handler: handleLogin,
         schema: loginSchema
     })
     app.post('/register', {
-        config: {
-            rateLimit: {
-                max: 30,
-                timeWindow: '1 minute'
-            }
-        },
         preHandler: [trimBody],
         handler: handleRegister,
         schema: registerSchema
     })
     app.post('/logout', {
-        config: {
-            rateLimit: {
-                max: 30,
-                timeWindow: '1 minute'
-            }
-        },
         preHandler: [authenticateToken],
         handler: handleLogout,
         schema: logoutSchema
     })
     app.post('/refresh', {
-        config: {
-            rateLimit: {
-                max: 30,
-                timeWindow: '1 minute'
-            }
-        },
         handler: handleRefreshToken,
         schema: refreshTokenSchema
     })
     app.post('/password', {
-        config: {
-            rateLimit: {
-                max: 30,
-                timeWindow: '1 minute'
-            }
-        },
         preHandler: [authenticateToken],
         handler: handleChangePassword,
         schema: changePasswordSchema

@@ -19,6 +19,9 @@ async function initializeVoucher() {
             'SELECT voucher_id, voucher_name, voucher_discount, expiry_date, description FROM vouchers'
         ].join(' ')
         const [rows] = await database.query(queryString) as RowDataPacket[]
+        if (!rows) {
+            throw new Error('No data returned from database query')
+        }
         rows.forEach((row: DBVoucher) => {
             const voucherID = row['voucher_id']
             const voucherName = row['voucher_name']

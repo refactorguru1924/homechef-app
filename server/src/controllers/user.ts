@@ -10,7 +10,7 @@ import { errorMessage, getLanguage } from "../services/index.js"
 import fs from "fs/promises"
 import path from "path"
 import { __dirname } from "../config.js"
-import languages from './languages/authError.json' assert { type: "json" }
+import languages from './languages/authError.json' with { type: "json" }
 
 
 interface UserChangeInfo {
@@ -91,7 +91,7 @@ async function handleAddAvatar(request: FastifyRequest, reply: FastifyReply) {
         if (!user) return reply.status(404).send(errorMessage(language.usernameNotFound))
         let fileName = `${Date.now()}-${user.username}.${file.mimetype.split('/')[1]}`
         let newPath = path.join(__dirname, '../static/avatars', fileName)
-        await fs.writeFile(newPath, buffer)
+        await fs.writeFile(newPath, new Uint8Array(buffer))
         if (user.avatar !== 'user.png') await fs.unlink(path.join(__dirname, '../static/avatars', user.avatar))
         await dbUpdateUserAvatar(fileName, user.username)
         user.setAvatar(fileName)

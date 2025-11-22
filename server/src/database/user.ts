@@ -53,6 +53,9 @@ async function initializeUser() {
             'ON users.user_id = orders.user_id'
         ].join(' ')
         const [rows] = await database.query(queryString) as RowDataPacket[]
+        if (!rows) {
+            throw new Error('No data returned from database query')
+        }
         rows.forEach((row: DBUser) => {
             const userID = row['user_id']
             const role = row['role']
@@ -89,6 +92,9 @@ async function dbSelectUserByUsername(username: string) {
             'WHERE username = ?'
         ].join(' ')
         const [rows] = await database.query(queryString, [username]) as RowDataPacket[]
+        if (!rows) {
+            return null
+        }
         const data: DBUser = rows[0]
         if (data) {
             const userID = data['user_id']
@@ -118,7 +124,7 @@ async function dbInsertUser(user: NewUser) {
     try {
         const queryString = [
             'INSERT INTO users (role_id, username, first_name, last_name, birth_date, sex, address, email, phone_number, hashed_password)',
-            'VALUES (2, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+            'VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         ].join(' ')
         await database.query(queryString, [
             user.username,

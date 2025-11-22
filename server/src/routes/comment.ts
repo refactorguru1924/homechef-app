@@ -81,24 +81,12 @@ const addCommentSchema: FastifySchema = {
     }
 }
 
-async function commentRoutes(app: FastifyInstance, options: RegisterOptions) {
+async function commentRoutes(app: FastifyInstance, _options: RegisterOptions) {
     app.get('/', {
-        config: {
-            rateLimit: {
-                max: 300,
-                timeWindow: '1 minute'
-            }
-        },
         handler: handleGetComments,
         schema: getCommentsSchema
     })
     app.post('/:id', {
-        config: {
-            rateLimit: {
-                max: 100,
-                timeWindow: '1 minute'
-            }
-        },
         preHandler: [authenticateToken, trimBody],
         handler: handleInsertComment,
         schema: addCommentSchema

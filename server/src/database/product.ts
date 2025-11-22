@@ -37,6 +37,9 @@ async function initializeProduct() {
             'LIMIT 10000'
         ].join(' ')
         const [rows] = await database.query(queryString) as RowDataPacket[]
+        if (!rows) {
+            throw new Error('No data returned from database query')
+        }
         rows.forEach((row: DBProduct) => {
             const productID = row['product_id']
             const productName = row['product_name']
@@ -76,6 +79,9 @@ async function dbSelectProductByID(productID: number) {
             'WHERE products.product_id = ?'
         ].join(' ')
         const [rows] = await database.query(queryString, [productID]) as RowDataPacket[]
+        if (!rows) {
+            return null
+        }
         const data = rows[0] as DBProduct
         if (!data) return null
         const productName = data['product_name']
@@ -114,6 +120,9 @@ async function dbSelectProduct(query: string) {
             "OR category_name LIKE concat('%' , ? , '%'))"
         ].join(' ')
         const [rows] = await database.query(queryString, [query, query, query]) as RowDataPacket[]
+        if (!rows) {
+            return []
+        }
         const result: Product[] = rows.map((row: DBProduct) => {
             const productID = row['product_id']
             const productName = row['product_name']

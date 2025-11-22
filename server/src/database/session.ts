@@ -8,6 +8,9 @@ async function dbIsExistsSession(sessionID: string) {
             'WHERE session_id = ?'
         ].join(' ')
         const [rows] = await database.query(queryString, [sessionID]) as RowDataPacket[]
+        if (!rows) {
+            return false
+        }
         if (rows[0]) return true
         return false
     } catch (error: any) {

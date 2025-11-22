@@ -10,7 +10,7 @@ function errorMessage(message: string) {
         message: message
     }
 }
-async function trimBody(request: FastifyRequest, reply: FastifyReply) {
+async function trimBody(request: FastifyRequest, _reply: FastifyReply) {
     const data = request.body as any
     Object.keys(data).forEach((key) => {
         if (typeof data[key] === 'string') {

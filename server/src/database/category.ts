@@ -18,6 +18,9 @@ async function initializeCategory() {
             'FROM categories'
         ].join(' ')
         const [rows] = await database.query(queryString) as RowDataPacket[]
+        if (!rows) {
+            throw new Error('No data returned from database query')
+        }
         rows.forEach((row: DBCategory) => {
             const categoryID = row['category_id']
             const categoryName = row['category_name']
