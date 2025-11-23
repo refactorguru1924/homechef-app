@@ -9,7 +9,7 @@ COPY package*.json ./
 # Install all dependencies (including dev dependencies for building)
 RUN npm ci
 
-# Copy source code
+# Copy source codedocker
 COPY . .
 
 # Build the TypeScript application
