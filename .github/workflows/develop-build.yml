@@ -1,0 +1,56 @@
+name: Build & Push Server Docker Image
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write  # required for GitHub OIDC
+
+    steps:
+      # 1️⃣ Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2️⃣ Authenticate with Google Cloud using OIDC
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
+
+      # 3️⃣ Configure Docker to push to Artifact Registry
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
+
+      # 4️⃣ Prepare Docker image variables
+      - name: Set Docker image variables
+        id: vars
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
+
+          IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_ARTIFACT_REPO }}/homechef-backend"
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+
+      # 5️⃣ Build Docker image from server/
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t $IMAGE:dev-${SHORT_SHA} \
+            -t $IMAGE:dev-latest \
+            ./server
+
+      # 6️⃣ Push both tags to Artifact Registry
+      - name: Push Docker image
+        run: |
+          docker push $IMAGE:dev-${SHORT_SHA}
+          docker push $IMAGE:dev-latest
+
