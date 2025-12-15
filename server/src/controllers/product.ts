@@ -84,6 +84,9 @@ async function handleSearchProduct(request: FastifyRequest, reply: FastifyReply)
                     finalResult.data = finalResult.data.slice((index + 1), (index + 61))
                     if (!result.data[index + 62]) hasNext = false
                     return reply.send({ data: finalResult.data, hasNext: hasNext })
+                } else {
+                    // Product with given ID not found in results, return empty data
+                    return reply.send({ data: [], hasNext: false })
                 }
             }
             else {

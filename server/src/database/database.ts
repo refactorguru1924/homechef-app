@@ -1,11 +1,28 @@
 import mysql from "mysql2"
-import { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME } from "../config.js"
+import { NODE_ENV, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, CLOUD_SQL_CONNECTION_NAME } from "../config.js"
 
-const database = mysql.createPool({
-    host: DB_HOST,
+interface DbConfig {
+    user: string | undefined;
+    password: string | undefined;
+    database: string | undefined;
+    host?: string;
+    port?: number;
+    socketPath?: string;
+}
+
+const dbConfig: DbConfig = {
     user: DB_USER,
     password: DB_PASSWORD,
     database: DB_NAME
-}).promise()
+};
+
+if (NODE_ENV === 'production') {
+    dbConfig.socketPath = `/cloudsql/${CLOUD_SQL_CONNECTION_NAME}`;
+} else {
+    dbConfig.host = DB_HOST;
+    dbConfig.port = 3306;
+}
+
+const database = mysql.createPool(dbConfig).promise()
 
 export default database
