@@ -9,7 +9,7 @@ COPY package*.json ./
 # Install all dependencies (including dev dependencies for building)
 RUN npm ci
 
-# Copy source codedocker
+# Copy source code
 COPY . .
 
 # Build the TypeScript application
@@ -43,5 +43,5 @@ COPY --from=builder /app/package.json ./
 # Expose the port
 EXPOSE 4000
 
-# Start the application
-CMD ["node", "dist/index.js"]
+# Start the application (use full path to node in distroless)
+CMD ["/nodejs/bin/node", "dist/index.js"]
