@@ -1,5 +1,0 @@
-export * from "./user.js"
-export * from "./auth.js"
-export * from "./product.js"
-export * from "./order.js"
-export * from "./comment.js"
