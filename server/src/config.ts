@@ -5,7 +5,7 @@ import * as dotenv from "dotenv"
 dotenv.config()
 
 const SERVER_HOST = (process.env.SERVER_HOST)
-const SERVER_PORT = parseInt(process.env.SERVER_PORT || '3000')
+const SERVER_PORT = parseInt(process.env.PORT || process.env.SERVER_PORT || '3000')
 const DB_HOST = process.env['DB_HOST']
 const DB_PORT = parseInt(process.env.DB_PORT || '3306')
 const DB_USER = process.env['DB_USER']
