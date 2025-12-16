@@ -98,7 +98,7 @@ fastify.setErrorHandler((error, request, reply) => {
 // Start server
 const start = async () => {
   try {
-    const port = parseInt(process.env.PORT || '3000');
+    const port = parseInt(process.env.PORT || '8080');
     const host = process.env.HOST || '0.0.0.0';
     
     await fastify.listen({ port, host });
