@@ -7,7 +7,8 @@ import {
     authRoutes,
     productRoutes,
     orderRoutes,
-    commentRoutes
+    commentRoutes,
+    healthRoutes
 } from "./routes/index.js"
 import fastifySwagger, { SwaggerOptions } from "@fastify/swagger"
 import fastifySwaggerUi, { FastifySwaggerUiOptions } from "@fastify/swagger-ui"
@@ -104,6 +105,7 @@ app.register(authRoutes, { prefix: '/api/auth' })
 app.register(productRoutes, { prefix: '/api/product' })
 app.register(orderRoutes, { prefix: '/api/order' })
 app.register(commentRoutes, { prefix: '/api/comment' })
+app.register(healthRoutes)
 
 app.setNotFoundHandler((_request: any, reply: any) => { // same of `setErrorHandler`
     return reply.status(200).sendFile('index.html', path.join(__dirname, '../public'))
