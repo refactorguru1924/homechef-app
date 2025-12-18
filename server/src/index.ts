@@ -17,6 +17,15 @@ fastify.get('/health', async () => {
   return { status: 'ok', timestamp: new Date().toISOString() };
 });
 
+// DB User endpoint
+fastify.get('/db-user', async () => {
+  const dbUser = process.env.DB_USER;
+  if (!dbUser) {
+    return { message: 'DB_USER environment variable not found' };
+  }
+  return { dbUser };
+});
+
 // Sample routes
 fastify.get('/api/users', async () => {
   return [
